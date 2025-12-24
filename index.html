@@ -1,0 +1,509 @@
+<!DOCTYPE html>
+<!-- saved from url=(0058)file:///Users/developer/Downloads/merry-christmas-dev.html -->
+<html lang="en"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Merry Christmas - Dev Edition</title>
+  <link href="./Merry Christmas - Dev Edition_files/css2" rel="stylesheet">
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      min-height: 100vh;
+      background: linear-gradient(135deg, #0f0f23 0%, #1a0a0a 50%, #0f0f23 100%);
+      font-family: 'JetBrains Mono', monospace;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      overflow-x: hidden;
+      overflow-y: auto;
+      position: relative;
+      padding: 20px 0;
+    }
+
+    /* Snowfall */
+    .snowflakes {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      overflow: hidden;
+      z-index: 0;
+      pointer-events: none;
+    }
+
+    .snowflake {
+      position: absolute;
+      top: -20px;
+      color: #fff;
+      font-size: 14px;
+      opacity: 0.8;
+      animation: snowfall linear infinite;
+      text-shadow: 0 0 5px rgba(255,255,255,0.5);
+    }
+
+    @keyframes snowfall {
+      to { 
+        transform: translateY(105vh) rotate(360deg); 
+      }
+    }
+
+    .container {
+      position: relative;
+      z-index: 1;
+      text-align: center;
+      padding: 40px;
+    }
+
+    /* IDE Window */
+    .ide-window {
+      background: #1e1e2e;
+      border-radius: 12px;
+      box-shadow: 
+        0 0 0 1px #313244,
+        0 25px 50px -12px rgba(220, 38, 38, 0.3),
+        0 0 100px rgba(34, 197, 94, 0.15);
+      overflow: hidden;
+      max-width: 720px;
+      animation: windowFloat 6s ease-in-out infinite;
+    }
+
+    @keyframes windowFloat {
+      0%, 100% { transform: translateY(0); }
+      50% { transform: translateY(-8px); }
+    }
+
+    /* Title bar */
+    .title-bar {
+      background: #181825;
+      padding: 12px 16px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      border-bottom: 1px solid #313244;
+    }
+
+    .window-btn {
+      width: 12px;
+      height: 12px;
+      border-radius: 50%;
+    }
+
+    .btn-red { background: #f38ba8; }
+    .btn-yellow { background: #f9e2af; }
+    .btn-green { background: #a6e3a1; }
+
+    .file-name {
+      margin-left: 12px;
+      color: #6c7086;
+      font-size: 13px;
+    }
+
+    .file-icon {
+      color: #f9e2af;
+    }
+
+    /* Code area */
+    .code-area {
+      padding: 25px 30px;
+      text-align: left;
+    }
+
+    .line {
+      display: flex;
+      margin: 6px 0;
+      opacity: 0;
+      animation: typeIn 0.5s ease forwards;
+    }
+
+    .line:nth-child(1) { animation-delay: 0.2s; }
+    .line:nth-child(2) { animation-delay: 0.4s; }
+    .line:nth-child(3) { animation-delay: 0.6s; }
+    .line:nth-child(4) { animation-delay: 0.8s; }
+    .line:nth-child(5) { animation-delay: 1s; }
+    .line:nth-child(6) { animation-delay: 1.2s; }
+    .line:nth-child(7) { animation-delay: 1.4s; }
+    .line:nth-child(8) { animation-delay: 1.6s; }
+    .line:nth-child(9) { animation-delay: 1.8s; }
+    .line:nth-child(10) { animation-delay: 2s; }
+    .line:nth-child(11) { animation-delay: 2.2s; }
+    .line:nth-child(12) { animation-delay: 2.4s; }
+
+    @keyframes typeIn {
+      from { opacity: 0; transform: translateX(-10px); }
+      to { opacity: 1; transform: translateX(0); }
+    }
+
+    .line-num {
+      color: #45475a;
+      width: 35px;
+      flex-shrink: 0;
+      user-select: none;
+      text-align: right;
+      padding-right: 15px;
+    }
+
+    .code {
+      flex: 1;
+    }
+
+    /* Catppuccin-inspired syntax highlighting */
+    .keyword { color: #cba6f7; }
+    .function { color: #89b4fa; }
+    .string { color: #a6e3a1; }
+    .number { color: #fab387; }
+    .comment { color: #6c7086; font-style: italic; }
+    .variable { color: #f38ba8; }
+    .operator { color: #89dceb; }
+    .bracket { color: #a6adc8; }
+    .decorator { color: #f9e2af; }
+    .class-name { color: #f9e2af; }
+
+    /* Christmas title display */
+    .christmas-display {
+      margin-top: 40px;
+      position: relative;
+    }
+
+    .merry-text {
+      font-family: 'Playfair Display', serif;
+      font-size: 28px;
+      font-weight: 700;
+      color: #a6e3a1;
+      letter-spacing: 8px;
+      text-transform: uppercase;
+      opacity: 0;
+      animation: fadeIn 1s ease forwards 2.6s;
+    }
+
+    .christmas-text {
+      font-family: 'Playfair Display', serif;
+      font-size: 90px;
+      font-weight: 900;
+      background: linear-gradient(135deg, #f38ba8 0%, #fab387 25%, #f9e2af 50%, #a6e3a1 75%, #89b4fa 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      filter: drop-shadow(0 0 30px rgba(166, 227, 161, 0.4));
+      animation: christmasPulse 3s ease-in-out infinite;
+      letter-spacing: 5px;
+      line-height: 1.1;
+      opacity: 0;
+      animation: fadeIn 1s ease forwards 2.8s, christmasPulse 3s ease-in-out infinite 3.8s;
+    }
+
+    @keyframes christmasPulse {
+      0%, 100% { filter: drop-shadow(0 0 30px rgba(166, 227, 161, 0.4)); }
+      33% { filter: drop-shadow(0 0 40px rgba(243, 139, 168, 0.5)); }
+      66% { filter: drop-shadow(0 0 40px rgba(137, 180, 250, 0.5)); }
+    }
+
+    @keyframes fadeIn {
+      to { opacity: 1; }
+    }
+
+    /* Terminal output style */
+    .terminal-output {
+      margin-top: 35px;
+      background: #11111b;
+      border: 1px solid #313244;
+      border-radius: 8px;
+      padding: 16px 20px;
+      display: inline-block;
+      text-align: left;
+      opacity: 0;
+      animation: fadeIn 1s ease forwards 3.2s;
+    }
+
+    .terminal-prompt {
+      color: #a6e3a1;
+      font-size: 13px;
+    }
+
+    .terminal-command {
+      color: #cdd6f4;
+      font-size: 13px;
+    }
+
+    .terminal-result {
+      color: #f38ba8;
+      margin-top: 8px;
+      font-size: 13px;
+    }
+
+    .cursor {
+      display: inline-block;
+      width: 8px;
+      height: 16px;
+      background: #a6e3a1;
+      margin-left: 4px;
+      animation: blink 1s step-end infinite;
+      vertical-align: middle;
+    }
+
+    @keyframes blink {
+      50% { opacity: 0; }
+    }
+
+    /* ASCII Tree */
+    .ascii-tree {
+      position: absolute;
+      right: -180px;
+      top: 50%;
+      transform: translateY(-50%);
+      color: #a6e3a1;
+      font-size: 11px;
+      line-height: 1.2;
+      text-align: left;
+      opacity: 0.3;
+      white-space: pre;
+    }
+
+    /* Floating ornaments */
+    .ornament {
+      position: fixed;
+      font-size: 24px;
+      animation: floatOrnament 8s infinite ease-in-out;
+      opacity: 0.7;
+      pointer-events: none;
+    }
+
+    @keyframes floatOrnament {
+      0%, 100% { transform: translateY(0) rotate(-5deg); }
+      50% { transform: translateY(-20px) rotate(5deg); }
+    }
+
+    .ornament:nth-child(1) { top: 8%; left: 8%; animation-delay: 0s; }
+    .ornament:nth-child(2) { top: 15%; right: 12%; animation-delay: 1.5s; }
+    .ornament:nth-child(3) { bottom: 25%; left: 5%; animation-delay: 3s; }
+    .ornament:nth-child(4) { bottom: 15%; right: 8%; animation-delay: 0.5s; }
+    .ornament:nth-child(5) { top: 35%; left: 3%; animation-delay: 2s; }
+    .ornament:nth-child(6) { top: 50%; right: 5%; animation-delay: 4s; }
+
+    /* Twinkling lights effect */
+    .lights {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      pointer-events: none;
+      z-index: 0;
+    }
+
+    .light {
+      position: absolute;
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+      animation: twinkle 2s infinite;
+    }
+
+    @keyframes twinkle {
+      0%, 100% { opacity: 0.3; transform: scale(1); }
+      50% { opacity: 1; transform: scale(1.2); }
+    }
+
+    .light.red { background: #f38ba8; box-shadow: 0 0 10px #f38ba8; }
+    .light.green { background: #a6e3a1; box-shadow: 0 0 10px #a6e3a1; }
+    .light.gold { background: #f9e2af; box-shadow: 0 0 10px #f9e2af; }
+    .light.blue { background: #89b4fa; box-shadow: 0 0 10px #89b4fa; }
+
+    /* Mobile responsive styles */
+    @media (max-width: 768px) {
+      .container {
+        padding: 15px;
+        width: 100%;
+      }
+
+      .ide-window {
+        border-radius: 8px;
+        max-width: 100%;
+      }
+
+      .code-area {
+        padding: 15px;
+        font-size: 11px;
+      }
+
+      .line-num {
+        width: 25px;
+        padding-right: 10px;
+      }
+
+      .christmas-text {
+        font-size: 48px;
+        letter-spacing: 2px;
+      }
+
+      .merry-text {
+        font-size: 20px;
+        letter-spacing: 4px;
+      }
+
+      .christmas-display {
+        margin-top: 25px;
+      }
+
+      .terminal-output {
+        margin-top: 20px;
+        padding: 12px 15px;
+        font-size: 11px;
+      }
+
+      .terminal-prompt,
+      .terminal-command,
+      .terminal-result {
+        font-size: 11px;
+      }
+
+      .ornament {
+        font-size: 18px;
+      }
+    }
+
+    @media (max-width: 400px) {
+      .christmas-text {
+        font-size: 36px;
+      }
+
+      .merry-text {
+        font-size: 16px;
+        letter-spacing: 3px;
+      }
+
+      .code-area {
+        padding: 10px;
+        font-size: 10px;
+      }
+
+      .file-name {
+        font-size: 11px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <!-- Snowfall -->
+  <div class="snowflakes" id="snow"><div class="snowflake" style="left: 8.47002%; animation-duration: 7.70326s; animation-delay: 4.39751s; font-size: 14.614px; opacity: 0.529237;">❆</div><div class="snowflake" style="left: 87.9958%; animation-duration: 10.1404s; animation-delay: 8.99246s; font-size: 13.1739px; opacity: 0.444366;">❆</div><div class="snowflake" style="left: 6.73898%; animation-duration: 13.1638s; animation-delay: 6.67848s; font-size: 9.39193px; opacity: 0.748702;">❆</div><div class="snowflake" style="left: 45.8058%; animation-duration: 7.8143s; animation-delay: 3.01831s; font-size: 16.4213px; opacity: 0.519479;">•</div><div class="snowflake" style="left: 54.8552%; animation-duration: 6.62452s; animation-delay: 2.05736s; font-size: 14.0791px; opacity: 0.730731;">❅</div><div class="snowflake" style="left: 45.7793%; animation-duration: 12.6303s; animation-delay: 0.319281s; font-size: 13.984px; opacity: 0.624836;">❄</div><div class="snowflake" style="left: 6.35461%; animation-duration: 7.2908s; animation-delay: 1.18971s; font-size: 11.352px; opacity: 0.348325;">•</div><div class="snowflake" style="left: 4.63269%; animation-duration: 7.58385s; animation-delay: 2.91902s; font-size: 18.94px; opacity: 0.354315;">❆</div><div class="snowflake" style="left: 0.342517%; animation-duration: 8.3601s; animation-delay: 1.0718s; font-size: 14.1286px; opacity: 0.568856;">❆</div><div class="snowflake" style="left: 86.2686%; animation-duration: 8.79207s; animation-delay: 7.94874s; font-size: 13.8526px; opacity: 0.543789;">❅</div><div class="snowflake" style="left: 57.0103%; animation-duration: 7.40116s; animation-delay: 8.34012s; font-size: 14.5252px; opacity: 0.454731;">∗</div><div class="snowflake" style="left: 77.4231%; animation-duration: 12.1076s; animation-delay: 3.30601s; font-size: 8.74006px; opacity: 0.684546;">∗</div><div class="snowflake" style="left: 30.4099%; animation-duration: 6.96006s; animation-delay: 1.36393s; font-size: 8.97286px; opacity: 0.735413;">∗</div><div class="snowflake" style="left: 17.8206%; animation-duration: 10.1627s; animation-delay: 9.4333s; font-size: 8.94467px; opacity: 0.791159;">❄</div><div class="snowflake" style="left: 32.8771%; animation-duration: 10.5092s; animation-delay: 4.312s; font-size: 17.1171px; opacity: 0.447063;">❄</div><div class="snowflake" style="left: 52.9266%; animation-duration: 11.5652s; animation-delay: 9.19329s; font-size: 16.9519px; opacity: 0.368031;">❅</div><div class="snowflake" style="left: 30.8048%; animation-duration: 8.31563s; animation-delay: 5.58297s; font-size: 8.04916px; opacity: 0.85403;">❅</div><div class="snowflake" style="left: 39.166%; animation-duration: 8.73742s; animation-delay: 3.01776s; font-size: 19.4315px; opacity: 0.69754;">❅</div><div class="snowflake" style="left: 10.6908%; animation-duration: 6.84955s; animation-delay: 4.05772s; font-size: 11.3769px; opacity: 0.671547;">•</div><div class="snowflake" style="left: 77.3333%; animation-duration: 8.81276s; animation-delay: 5.02065s; font-size: 9.69248px; opacity: 0.414264;">❆</div><div class="snowflake" style="left: 16.1046%; animation-duration: 12.6024s; animation-delay: 0.977557s; font-size: 17.668px; opacity: 0.622276;">∗</div><div class="snowflake" style="left: 47.8755%; animation-duration: 9.40978s; animation-delay: 0.888886s; font-size: 8.0975px; opacity: 0.409344;">❅</div><div class="snowflake" style="left: 5.46951%; animation-duration: 13.0267s; animation-delay: 9.31074s; font-size: 16.8315px; opacity: 0.574767;">❆</div><div class="snowflake" style="left: 52.701%; animation-duration: 10.3723s; animation-delay: 3.28656s; font-size: 8.64558px; opacity: 0.838799;">❅</div><div class="snowflake" style="left: 68.7686%; animation-duration: 10.4275s; animation-delay: 3.94324s; font-size: 16.9602px; opacity: 0.720584;">•</div><div class="snowflake" style="left: 13.9817%; animation-duration: 11.1689s; animation-delay: 0.770428s; font-size: 12.9588px; opacity: 0.872657;">❄</div><div class="snowflake" style="left: 23.2673%; animation-duration: 8.76075s; animation-delay: 0.23516s; font-size: 8.07425px; opacity: 0.54202;">❅</div><div class="snowflake" style="left: 19.9297%; animation-duration: 11.9383s; animation-delay: 4.98988s; font-size: 13.1644px; opacity: 0.822865;">•</div><div class="snowflake" style="left: 97.0063%; animation-duration: 9.86375s; animation-delay: 4.33224s; font-size: 8.84332px; opacity: 0.597345;">❅</div><div class="snowflake" style="left: 74.6737%; animation-duration: 10.6184s; animation-delay: 3.06542s; font-size: 13.0043px; opacity: 0.323787;">❄</div><div class="snowflake" style="left: 58.8957%; animation-duration: 7.52053s; animation-delay: 2.59612s; font-size: 16.7136px; opacity: 0.760423;">❅</div><div class="snowflake" style="left: 52.935%; animation-duration: 10.9986s; animation-delay: 5.52855s; font-size: 19.1307px; opacity: 0.751137;">∗</div><div class="snowflake" style="left: 92.7551%; animation-duration: 8.00851s; animation-delay: 0.915098s; font-size: 9.15029px; opacity: 0.64138;">❅</div><div class="snowflake" style="left: 45.0216%; animation-duration: 6.68139s; animation-delay: 9.96054s; font-size: 13.8188px; opacity: 0.627094;">❄</div><div class="snowflake" style="left: 34.2756%; animation-duration: 9.41573s; animation-delay: 0.941289s; font-size: 13.0742px; opacity: 0.793368;">•</div><div class="snowflake" style="left: 61.7467%; animation-duration: 10.8457s; animation-delay: 4.86986s; font-size: 18.1166px; opacity: 0.832219;">❄</div><div class="snowflake" style="left: 31.8837%; animation-duration: 12.0859s; animation-delay: 8.71232s; font-size: 14.2444px; opacity: 0.802893;">•</div><div class="snowflake" style="left: 34.687%; animation-duration: 10.4326s; animation-delay: 2.39924s; font-size: 19.5232px; opacity: 0.637827;">∗</div><div class="snowflake" style="left: 58.7999%; animation-duration: 7.85664s; animation-delay: 7.72135s; font-size: 16.2439px; opacity: 0.372669;">❄</div><div class="snowflake" style="left: 33.8363%; animation-duration: 13.8645s; animation-delay: 1.56322s; font-size: 12.7929px; opacity: 0.553406;">∗</div><div class="snowflake" style="left: 26.9211%; animation-duration: 10.9729s; animation-delay: 4.25606s; font-size: 18.1545px; opacity: 0.554351;">❆</div><div class="snowflake" style="left: 82.9425%; animation-duration: 13.7216s; animation-delay: 0.18354s; font-size: 15.3734px; opacity: 0.880168;">∗</div><div class="snowflake" style="left: 27.4044%; animation-duration: 8.31172s; animation-delay: 5.34656s; font-size: 12.4417px; opacity: 0.456097;">∗</div><div class="snowflake" style="left: 87.716%; animation-duration: 13.1923s; animation-delay: 4.73s; font-size: 10.4132px; opacity: 0.514709;">❅</div><div class="snowflake" style="left: 19.14%; animation-duration: 6.64059s; animation-delay: 5.24475s; font-size: 13.4736px; opacity: 0.425207;">❆</div><div class="snowflake" style="left: 85.7217%; animation-duration: 7.86173s; animation-delay: 8.31986s; font-size: 19.0144px; opacity: 0.472457;">❆</div><div class="snowflake" style="left: 78.695%; animation-duration: 11.0887s; animation-delay: 8.74948s; font-size: 8.21164px; opacity: 0.79531;">∗</div><div class="snowflake" style="left: 44.7613%; animation-duration: 7.15769s; animation-delay: 2.41896s; font-size: 9.76277px; opacity: 0.52172;">•</div><div class="snowflake" style="left: 35.9283%; animation-duration: 9.26282s; animation-delay: 9.35339s; font-size: 17.2468px; opacity: 0.725568;">❆</div><div class="snowflake" style="left: 63.6971%; animation-duration: 13.3532s; animation-delay: 8.30063s; font-size: 12.3427px; opacity: 0.645696;">❅</div></div>
+
+  <!-- Twinkling lights -->
+  <div class="lights" id="lights"><div class="light blue" style="left: 23.6939%; top: 70.4071%; animation-delay: 0.849118s;"></div><div class="light blue" style="left: 99.9649%; top: 30.6209%; animation-delay: 1.5535s;"></div><div class="light blue" style="left: 86.6195%; top: 85.9424%; animation-delay: 1.81555s;"></div><div class="light gold" style="left: 83.6467%; top: 40.1196%; animation-delay: 0.77495s;"></div><div class="light green" style="left: 76.7301%; top: 6.36208%; animation-delay: 0.266899s;"></div><div class="light green" style="left: 62.8333%; top: 18.7374%; animation-delay: 1.58353s;"></div><div class="light blue" style="left: 2.72248%; top: 9.552%; animation-delay: 1.98983s;"></div><div class="light red" style="left: 68.9269%; top: 0.234146%; animation-delay: 1.34197s;"></div><div class="light gold" style="left: 81.4356%; top: 0.406974%; animation-delay: 0.525135s;"></div><div class="light red" style="left: 94.0363%; top: 75.3047%; animation-delay: 1.29555s;"></div><div class="light red" style="left: 74.3026%; top: 86.663%; animation-delay: 1.14063s;"></div><div class="light red" style="left: 39.469%; top: 23.0739%; animation-delay: 0.141489s;"></div><div class="light gold" style="left: 85.8666%; top: 22.1508%; animation-delay: 1.75921s;"></div><div class="light blue" style="left: 39.2454%; top: 34.9739%; animation-delay: 0.258487s;"></div><div class="light blue" style="left: 14.5052%; top: 55.9203%; animation-delay: 0.509146s;"></div><div class="light blue" style="left: 2.44586%; top: 2.15775%; animation-delay: 1.21256s;"></div><div class="light gold" style="left: 90.2286%; top: 42.3162%; animation-delay: 0.391305s;"></div><div class="light gold" style="left: 77.394%; top: 79.8101%; animation-delay: 1.92552s;"></div><div class="light red" style="left: 80.0463%; top: 99.328%; animation-delay: 0.277615s;"></div><div class="light green" style="left: 1.14116%; top: 59.9186%; animation-delay: 1.04601s;"></div><div class="light gold" style="left: 67.6773%; top: 52.8227%; animation-delay: 1.24735s;"></div><div class="light green" style="left: 42.9343%; top: 23.4419%; animation-delay: 1.86243s;"></div><div class="light gold" style="left: 6.76742%; top: 36.2687%; animation-delay: 1.01469s;"></div><div class="light gold" style="left: 75.7282%; top: 18.0911%; animation-delay: 1.33122s;"></div><div class="light red" style="left: 29.5748%; top: 31.3075%; animation-delay: 0.396264s;"></div></div>
+
+  <!-- Floating ornaments -->
+  <div class="ornament">🎄</div>
+  <div class="ornament">⭐</div>
+  <div class="ornament">🎁</div>
+  <div class="ornament">🔔</div>
+  <div class="ornament">❄️</div>
+  <div class="ornament">🎅</div>
+
+  <div class="container">
+    <div class="ide-window">
+      <div class="title-bar">
+        <div class="window-btn btn-red"></div>
+        <div class="window-btn btn-yellow"></div>
+        <div class="window-btn btn-green"></div>
+        <span class="file-name"><span class="file-icon">🎄</span> santa.py</span>
+      </div>
+      <div class="code-area">
+        <div class="line">
+          <span class="line-num">1</span>
+          <span class="code"><span class="comment"># 🎅 Running in production at the North Pole</span></span>
+        </div>
+        <div class="line">
+          <span class="line-num">2</span>
+          <span class="code"></span>
+        </div>
+        <div class="line">
+          <span class="line-num">3</span>
+          <span class="code"><span class="keyword">class</span> <span class="class-name">Santa</span><span class="bracket">:</span></span>
+        </div>
+        <div class="line">
+          <span class="line-num">4</span>
+          <span class="code">    <span class="variable">naughty_list</span> <span class="operator">=</span> <span class="bracket">[]</span>  <span class="comment"># SELECT * FROM devs WHERE tests = 0</span></span>
+        </div>
+        <div class="line">
+          <span class="line-num">5</span>
+          <span class="code">    <span class="variable">nice_list</span> <span class="operator">=</span> <span class="bracket">[</span><span class="string">"you"</span><span class="bracket">]</span>  <span class="comment"># 🎁</span></span>
+        </div>
+        <div class="line">
+          <span class="line-num">6</span>
+          <span class="code"></span>
+        </div>
+        <div class="line">
+          <span class="line-num">7</span>
+          <span class="code">    <span class="keyword">def</span> <span class="function">deliver_gifts</span><span class="bracket">(</span><span class="variable">self</span><span class="bracket">)</span><span class="bracket">:</span></span>
+        </div>
+        <div class="line">
+          <span class="line-num">8</span>
+          <span class="code">        <span class="keyword">while</span> <span class="variable">cookies</span><span class="bracket">:</span>  <span class="comment"># O(n!) complexity but worth it</span></span>
+        </div>
+        <div class="line">
+          <span class="line-num">9</span>
+          <span class="code">            <span class="variable">self</span><span class="operator">.</span><span class="function">spread_joy</span><span class="bracket">()</span></span>
+        </div>
+        <div class="line">
+          <span class="line-num">10</span>
+          <span class="code"></span>
+        </div>
+        <div class="line">
+          <span class="line-num">11</span>
+          <span class="code"><span class="comment"># TODO: Fix chimney edge cases before Dec 25</span></span>
+        </div>
+        <div class="line">
+          <span class="line-num">12</span>
+          <span class="code"><span class="class-name">Santa</span><span class="bracket">().</span><span class="function">deliver_gifts</span><span class="bracket">()</span></span>
+        </div>
+      </div>
+    </div>
+
+    <div class="christmas-display">
+      <div class="merry-text">Merry</div>
+      <div class="christmas-text">Christmas</div>
+    </div>
+
+    <div class="terminal-output">
+      <div><span class="terminal-prompt">~/north-pole $</span> <span class="terminal-command">npm install christmas-spirit</span></div>
+      <div class="terminal-result">✨ Successfully installed joy@2025.12.25<span class="cursor"></span></div>
+    </div>
+  </div>
+
+  <script>
+    // Generate snowfall
+    const snow = document.getElementById('snow');
+    const snowChars = ['❄', '❅', '❆', '•', '∗'];
+    
+    for (let i = 0; i < 50; i++) {
+      const flake = document.createElement('div');
+      flake.className = 'snowflake';
+      flake.textContent = snowChars[Math.floor(Math.random() * snowChars.length)];
+      flake.style.left = Math.random() * 100 + '%';
+      flake.style.animationDuration = (Math.random() * 8 + 6) + 's';
+      flake.style.animationDelay = Math.random() * 10 + 's';
+      flake.style.fontSize = (Math.random() * 12 + 8) + 'px';
+      flake.style.opacity = Math.random() * 0.6 + 0.3;
+      snow.appendChild(flake);
+    }
+
+    // Generate twinkling lights
+    const lights = document.getElementById('lights');
+    const colors = ['red', 'green', 'gold', 'blue'];
+    
+    for (let i = 0; i < 25; i++) {
+      const light = document.createElement('div');
+      light.className = 'light ' + colors[Math.floor(Math.random() * colors.length)];
+      light.style.left = Math.random() * 100 + '%';
+      light.style.top = Math.random() * 100 + '%';
+      light.style.animationDelay = Math.random() * 2 + 's';
+      lights.appendChild(light);
+    }
+  </script>
+
+
+</body></html>
